@@ -15,11 +15,34 @@
 
 package org.droolsfiddle.rest;
 
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+
+import javax.ws.rs.ApplicationPath;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by jvipret on 08/06/2016.
  */
+@ApplicationPath("")
 public class RESTApplication extends javax.ws.rs.core.Application {
+  private Set<Object> singletons = new HashSet<Object>();
+  private HashSet<Class<?>> classes = new HashSet<Class<?>>();
 
   public RESTApplication() {
+    CorsFilter corsFilter = new CorsFilter();
+    corsFilter.getAllowedOrigins().add("*");
+    corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
+    singletons.add(corsFilter);
+  }
+
+  @Override
+  public Set<Object> getSingletons() {
+    return singletons;
+  }
+
+  @Override
+  public HashSet<Class<?>> getClasses(){
+    return classes;
   }
 }
